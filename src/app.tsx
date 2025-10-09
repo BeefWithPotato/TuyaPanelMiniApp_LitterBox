@@ -9,6 +9,7 @@ import RayErrorCatch from '@ray-js/ray-error-catch';
 import { devices } from '@/devices';
 import Strings from '@/i18n';
 import composeLayout from './composeLayout';
+import { initStorage } from '@/utils/storage';
 
 interface Props {
   children: React.ReactNode;
@@ -16,8 +17,9 @@ interface Props {
 
 initPanelEnvironment({ useDefaultOffline: true });
 class App extends React.Component<Props> {
-  componentDidMount() {
+  async componentDidMount() {
     console.log('=== App did mount');
+    await initStorage();
   }
 
   render() {

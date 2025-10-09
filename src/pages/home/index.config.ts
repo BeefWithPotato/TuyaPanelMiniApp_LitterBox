@@ -1,7 +1,8 @@
 export default {
-  backgroundColor: '--app-B1',
-  navigationBarBackgroundColor: '--app-B2',
-  navigationBarTextStyle: '--app-B2-N1',
+  backgroundColor: '#f2f4f6',
+  backgroundTextStyle: 'dark',
+  navigationBarBackgroundColor: '#f2f4f6',
+  navigationBarTextStyle: 'black',
   navigationBarTitleText: 'Home',
   navigationStyle: 'custom',
   disableScroll: true,
