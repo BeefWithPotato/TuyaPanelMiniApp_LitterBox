@@ -1,31 +1,63 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View } from '@ray-js/ray';
 import { NavBar, Button } from '@ray-js/smart-ui';
 import { IconFont } from '@/components/icon-font';
 import styles from './index.module.less';
 import { Image } from '@ray-js/smart-ui';
 import { useDpSchema, useProps, useDevInfo } from '@ray-js/panel-sdk';
-import { getCloud, setCloud } from '@/utils/storage';
+import { getCloudData, setCloudData, getAllCloudData } from '@/utils/storage';
+import { getAnalyticsLogsStatusLog } from '@ray-js/ray';
 import litterBoxImage from '@/pages/assets/litterBox_image.jpg';
 
+interface WeightRecord {
+  weight: number;
+  timestamp: number;
+}
+
 export default function Home() {
+  const dpState = useProps(state => state); // Get all dpState
+  const devInfo = useDevInfo();
   // When the project starts, automatically pull the product schema information corresponding to the productId on the developer platform
   const dpSchema = useDpSchema();
   // Read dpState data from the device model
-  const dpState = useProps(state => state); // Get all dpState
-  const devInfo = useDevInfo();
   console.log('devInfo:', devInfo);
   console.log('dpSchema:', dpSchema);
 
-  interface WeightRecord {
-    weight: number;
-    timestamp: number;
-  }
-  setCloud('cat_weight', devInfo.dpCodes.cat_weight);
-  const [weightHistory, setWeightHistory] = React.useState<WeightRecord[]>([]);
+  const [weightHistory, setWeightHistory] = useState<WeightRecord[]>([]);
+
+  useEffect(() => {
+    // 6: cat_weight g
+    // 7: excretion_times_day 每天排泄次数
+    // 8: excretion_time_day 每次排泄时长
+    // 9： manual_clean 手动清理 Boolean
+
+    const getCatWeightReportData = async () => {
+      try {
+        console.log('devInfo?.devId', devInfo?.devId);
+        console.log('dpSchema.cat_weight.id.toString()', dpSchema.cat_weight.id.toString());
+        const res = await getAnalyticsLogsStatusLog({
+          devId: 'vdevo175894599259650',
+          dpIds: '6,7,8,9',
+          // dpIds: 'cat_weight',
+          offset: 0,
+          limit: 20,
+          // startTime: '1760392672',
+          // endTime: new Date().getTime().toString(),
+        });
+        console.log('✅ Cloud data loaded:', res);
+      } catch (err) {
+        console.error('❌ Failed to load cloud data:', err);
+      }
+    };
+    getCatWeightReportData();
+  }, [devInfo?.devId]);
+
+  // const res = await getAllCloudData();
+  // console.log('All Cloud Data:', res);
+  // setCloudData('cat_weight', devInfo.dpCodes.cat_weight);
 
   // Load stored weight history on component mount
-  // React.useEffect(() => {
+  // useEffect(() => {
   //   const loadWeightHistory = async () => {
   //     try {
   //       const result = await getCloud('weightHistory');
@@ -43,7 +75,7 @@ export default function Home() {
   // }, []);
 
   // Watch for cat_weight DP changes
-  // React.useEffect(() => {
+  // useEffect(() => {
   //   // Check if dpState has changed and contains cat_weight
   //   if (dpState && typeof dpState === 'object') {
   //     const catWeight = Object.entries(dpState).find(([key]) => key === 'cat_weight')?.[1];

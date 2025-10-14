@@ -62,17 +62,14 @@ type TReturnResData<T = any> = {
   [key: string]: TReturnRes<T>;
 };
 
-export async function getCloudDataAll(): Promise<TReturnResData> {
+export async function getAllCloudData(): Promise<TReturnResData> {
   const storage = getStorage();
   try {
-    return await storage.getAll((localDatas: { [key: string]: TReturnRes }) => {
-      return localDatas;
+    return await storage.getAll((localData: { [key: string]: TReturnRes }) => {
+      return localData;
     });
-
-    // console.log(`[SmartStorage] 📦 Get key "${key}":`, res);
-    // return res ?? null;
   } catch (err) {
-    console.error(`[SmartStorage] ❌ Failed to get key "${key}":`, err);
+    console.error(`[SmartStorage] ❌ Failed to get all local data`, err);
     return null;
   }
 }
