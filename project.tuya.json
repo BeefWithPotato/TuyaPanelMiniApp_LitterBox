@@ -11,9 +11,9 @@
     "BizKit": "3.0.1",
     "HomeKit": "3.0.2"
   },
-  "baseversion": "2.27.3",
+  "baseversion": "2.29.18",
   "devMode": "ray",
   "compileType": "miniprogram",
-  "projectname": "LitterBox",
+  "projectname": "CatLitterBox",
   "description": ""
 }

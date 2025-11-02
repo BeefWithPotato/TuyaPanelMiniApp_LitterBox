@@ -1,6 +1,4 @@
-import React, { useState, useEffect, Fragment, FC } from 'react';
-import { useHideMenuButton, useSelectorMemoized } from '@/hooks';
-import { selectSafeArea } from '@/redux/modules/systemInfoSlice';
+import React, { useState, useEffect, Fragment } from 'react';
 import { Text, View, getAnalyticsLogsStatusLog } from '@ray-js/ray';
 import { NavBar, Button, Tabbar, TabbarItem } from '@ray-js/smart-ui';
 import { IconFont } from '@/components/icon-font';
@@ -12,7 +10,6 @@ import { useDpSchema, useProps, useDevInfo } from '@ray-js/panel-sdk';
 import { getCloudData, setCloudData, getAllCloudData } from '@/utils/storage';
 import litterBoxImage from '@/pages/assets/litterBox_image.jpg';
 import { router } from '@ray-js/ray';
-import TopBar from './TopBar';
 
 interface WeightRecord {
   weight: number;
@@ -20,9 +17,6 @@ interface WeightRecord {
 }
 
 export default function Home() {
-  const safeArea = useSelectorMemoized(selectSafeArea);
-  useHideMenuButton();
-
   const dpState = useProps(state => state); // Get all dpState
   const devInfo = useDevInfo();
   // When the project starts, automatically pull the product schema information corresponding to the productId on the developer platform
@@ -37,16 +31,16 @@ export default function Home() {
   //   setActive(e.detail);
   // };
 
-  // const onNavTabChange = e => {
-  //   setActive(e.detail);
+  const onNavTabChange = e => {
+    setActive(e.detail);
 
-  //   // Navigate to corresponding page
-  //   if (e.detail === 'home') {
-  //     router.push('/');
-  //   } else if (e.detail === 'setting') {
-  //     router.push('/settings');
-  //   }
-  // };
+    // Navigate to corresponding page
+    if (e.detail === 'home') {
+      router.push('/');
+    } else if (e.detail === 'setting') {
+      router.push('/settings');
+    }
+  };
 
   useEffect(() => {
     // 6: cat_weight g
@@ -80,10 +74,8 @@ export default function Home() {
   // setCloudData('cat_weight', devInfo.dpCodes.cat_weight);
 
   return (
-    <View className={styles.container} style={{ paddingTop: `${safeArea?.top ?? 48}px` }}>
-      <TopBar />
-      {/* <NavBar title="不锈钢智能猫砂盆" round onClickTitle={() => {}} /> */}
-      {/* <TopBar /> */}
+    <Fragment>
+      <NavBar title="不锈钢智能猫砂盆!!!!!" round onClickTitle={() => {}} />
       <View
         style={{
           display: 'flex',
@@ -120,6 +112,6 @@ export default function Home() {
           </View>
         </View>
       </View> */}
-    </View>
+    </Fragment>
   );
 }

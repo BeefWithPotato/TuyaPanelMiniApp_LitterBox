@@ -1,20 +1,32 @@
+import { get, merge } from 'lodash';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { theme as localTheme } from '../../config';
 import { ReduxState } from '..';
 
-type ThemeType = 'light' | 'dark';
-
-type Theme = {
-  type: ThemeType;
-};
+type Theme = typeof localTheme;
+type ToggleThemePayload = 'light' | 'dark' | undefined;
 
 /**
  * Slice
  */
 const themeSlice = createSlice({
   name: 'theme',
-  initialState: {} as Theme,
+  initialState: localTheme as Theme,
   reducers: {
-    updateThemeType(state, action: PayloadAction<ThemeType>) {
+    toggleTheme(state, action: PayloadAction<ToggleThemePayload>) {
+      if (action.payload) {
+        state.type = action.payload;
+      } else {
+        state.type = state.type === 'light' ? 'dark' : 'light';
+      }
+    },
+    updateTheme(state, action: PayloadAction<Theme>) {
+      return merge(state, action.payload) as Theme;
+    },
+    updateThemeColor(state, action: PayloadAction<string>) {
+      state.global.brand = action.payload;
+    },
+    updateThemeType(state, action: PayloadAction<ToggleThemePayload>) {
       state.type = action.payload;
     },
   },
@@ -23,12 +35,16 @@ const themeSlice = createSlice({
 /**
  * Actions
  */
-
-export const { updateThemeType } = themeSlice.actions;
+export const { toggleTheme, updateTheme, updateThemeColor, updateThemeType } = themeSlice.actions;
 
 /**
  * Selectors
  */
-export const selectThemeType = (state: ReduxState) => state.theme.type;
+
+type SelectTheme = (path: string) => (state: ReduxState) => string | number | undefined;
+
+export const selectTheme: SelectTheme = path => state => get(state.theme, path);
+
+export const selectThemeColor = (state: ReduxState) => state.theme.global.brand;
 
 export default themeSlice.reducer;

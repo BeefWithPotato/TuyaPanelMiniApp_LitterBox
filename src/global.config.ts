@@ -3,10 +3,11 @@ import { GlobalConfig } from '@ray-js/types';
 export const tuya = {
   themeLocation: 'theme.json',
   window: {
-    backgroundColor: '--app-B1',
+    backgroundColor: '#e3eef6',
     navigationBarTitleText: '',
-    navigationBarBackgroundColor: '--app-B2',
-    navigationBarTextStyle: '--app-B2-N1',
+    navigationBarBackgroundColor: '#f2f4f6',
+    navigationBarTextStyle: 'black',
+    navigationStyle: 'custom',
   },
   functionalPages: {
     // 设备详情功能页，若未自定义实现设备详情界面，该项为必填配置，不可删除。

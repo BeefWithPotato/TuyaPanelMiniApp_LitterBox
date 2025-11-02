@@ -12,13 +12,16 @@
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx --fix"
   },
   "dependencies": {
+    "@ray-js/api": "^1.7.51",
     "@ray-js/components-ty": "^0.2.0",
     "@ray-js/panel-sdk": "^1.13.1",
     "@ray-js/ray": "^1.7.24",
     "@ray-js/ray-error-catch": "^0.0.25",
     "@ray-js/smart-ui": "^2.5.1",
+    "@ray-js/tuya-dp-kit": "^0.0.9",
     "@reduxjs/toolkit": "^1.9.3",
     "clsx": "^1.2.1",
+    "panel-sdk": "^1.0.22",
     "react-redux": "^7.2.1",
     "redux-logger": "^3.0.6"
   },
