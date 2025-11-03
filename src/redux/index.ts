@@ -6,8 +6,9 @@ import devInfoReducer from './modules/devInfoSlice';
 import dpStateReducer, { DpState, DpStateKey } from './modules/dpStateSlice';
 import themeReducer from './modules/themeSlice';
 import systemInfoReducer from './modules/systemInfoSlice';
+import uiReducer from './modules/uiSlice';
 import { getDevId, getDpIdByCode } from '@/utils';
-import { useDispatch } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector as useSelectorBase } from 'react-redux';
 
 const isDebug = process.env.NODE_ENV === 'development';
 const logger = createLogger({
@@ -44,6 +45,7 @@ const store = configureStore({
   reducer: {
     devInfo: devInfoReducer,
     // dpState: dpStateReducer,
+    uiState: uiReducer,
     theme: themeReducer,
     systemInfo: systemInfoReducer,
   },
@@ -60,5 +62,10 @@ export type ThunkAppDispatch = ThunkDispatch<ReduxState, void, Action>;
 export type AppDispatch = typeof store.dispatch;
 
 export const useAppDispatch = () => useDispatch<AppDispatch>();
+
+export const useSelector = <TSelected>(
+  selector: (state: ReduxState) => TSelected,
+  equalityFn?: (left: TSelected, right: TSelected) => boolean
+) => useSelectorBase<ReduxState, TSelected>(selector, equalityFn || shallowEqual);
 
 export default store;

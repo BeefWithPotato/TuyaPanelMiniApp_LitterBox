@@ -10,29 +10,30 @@ export const routes: Routes = [
   },
   {
     route: '/customSettings',
-    path: '/pages/Settings/index',
-    name: 'Settings',
+    path: '/pages/CustomSettings/index',
+    name: 'CustomSettings',
   },
 ];
 
-export const tabBar: TabBar = {
-  textColor: '#000000',
-  selectedColor: '#ff0000',
-  backgroundColor: '#ffffff',
-  list: [
-    {
-      route: '/',
-      text: 'Home',
-      icon: '/images/tabbar/home.svg',
-      activeIcon: '/images/tabbar/home.svg',
-      pagePath: '/pages/home/index',
-    },
-    {
-      route: '/customSettings',
-      text: 'CustomSettings',
-      icon: '/images/tabbar/settings.svg',
-      activeIcon: '/images/tabbar/settings.svg',
-      pagePath: '/pages/Settings/index',
-    },
-  ],
-};
+// export const tabBar: TabBar = {
+//   textColor: '#6b7280', // Gray-500: unselected text
+//   selectedColor: '#0078FF', // Bright blue for active
+//   backgroundColor: '#F9FAFB', // Light gray background
+//   borderStyle: 'white', // Optional: top border color of tab bar
+//   list: [
+//     {
+//       route: '/',
+//       text: 'Home',
+//       icon: '/images/tabbar/home.svg',
+//       activeIcon: '/images/tabbar/home.svg',
+//       pagePath: '/pages/home/index',
+//     },
+//     {
+//       route: '/customSettings',
+//       text: 'CustomSettings',
+//       icon: '/images/tabbar/settings.svg',
+//       activeIcon: '/images/tabbar/settings.svg',
+//       pagePath: '/pages/CustomSettings/index',
+//     },
+//   ],
+// };

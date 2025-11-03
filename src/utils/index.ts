@@ -2,6 +2,7 @@ import { kit, utils } from '@ray-js/panel-sdk';
 import Strings from '@/i18n';
 import store from '@/redux';
 import { DpStateKey } from '@/redux/modules/dpStateSlice';
+import { useDpSchema, useDevInfo } from '@ray-js/panel-sdk';
 
 const { getDevInfo } = kit;
 
@@ -64,7 +65,9 @@ export const formatDevSchema = devInfo => {
 /**
  * 获取devId
  */
-export const getDevId = () => getDevInfo().devId;
+export const getDevId = () => {
+  return getDevInfo().devId;
+};
 
 /**
  * 获取productId

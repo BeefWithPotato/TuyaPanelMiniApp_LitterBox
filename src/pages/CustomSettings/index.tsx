@@ -1,22 +1,26 @@
 import React, { useState, useEffect, Fragment } from 'react';
+import { useHideMenuButton, useSelectorMemoized } from '@/hooks';
+import { selectSafeArea } from '@/redux/modules/systemInfoSlice';
 import { Text, View, getAnalyticsLogsStatusLog } from '@ray-js/ray';
 import { NavBar, Button, Tabbar, TabbarItem } from '@ray-js/smart-ui';
 import { IconFont } from '@/components/icon-font';
-import houseIcon from '@tuya-miniapp/icons/dist/svg/House';
-import pawPrintIcon from '@tuya-miniapp/icons/dist/svg/PawPrint';
 import styles from './index.module.less';
 import { Image } from '@ray-js/smart-ui';
 import { useDpSchema, useProps, useDevInfo } from '@ray-js/panel-sdk';
 import { getCloudData, setCloudData, getAllCloudData } from '@/utils/storage';
 import litterBoxImage from '@/pages/assets/litterBox_image.jpg';
 import { router } from '@ray-js/ray';
+import TopBar from '@/components/TopBar';
 
 interface WeightRecord {
   weight: number;
   timestamp: number;
 }
 
-export default function Home() {
+export default function Settings() {
+  const safeArea = useSelectorMemoized(selectSafeArea);
+  useHideMenuButton();
+
   const dpState = useProps(state => state); // Get all dpState
   const devInfo = useDevInfo();
   // When the project starts, automatically pull the product schema information corresponding to the productId on the developer platform
@@ -74,8 +78,9 @@ export default function Home() {
   // setCloudData('cat_weight', devInfo.dpCodes.cat_weight);
 
   return (
-    <Fragment>
-      <NavBar title="不锈钢智能猫砂盆!!!!!" round onClickTitle={() => {}} />
+    <View className={styles.container} style={{ paddingTop: `${safeArea?.top ?? 48}px` }}>
+      <TopBar />
+      {/* <NavBar title="不锈钢智能猫砂盆!!!!!" round onClickTitle={() => {}} />
       <View
         style={{
           display: 'flex',
@@ -85,11 +90,11 @@ export default function Home() {
           // backgroundColor: 'red',
         }}
       >
-        {/* {Object.keys(dpSchema)?.map(schemaName => {
+        {Object.keys(dpSchema)?.map(schemaName => {
           return <Text style={{ color: 'black' }}>{schemaName}</Text>;
-        })} */}
+        })}
         <Image width="300px" height="300px" src={litterBoxImage} />
-      </View>
+      </View> */}
       {/* <Tabbar active={active} safeAreaInsetBottom={false} onChange={onNavTabChange}>
         <TabbarItem name="home" icon={houseIcon}>
           Home
@@ -112,6 +117,6 @@ export default function Home() {
           </View>
         </View>
       </View> */}
-    </Fragment>
+    </View>
   );
 }

@@ -1,32 +1,25 @@
-import React, { useState, useEffect, Fragment, FC } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { useHideMenuButton, useSelectorMemoized } from '@/hooks';
 import { selectSafeArea } from '@/redux/modules/systemInfoSlice';
 import { Text, View, getAnalyticsLogsStatusLog } from '@ray-js/ray';
 import { NavBar, Button, Tabbar, TabbarItem } from '@ray-js/smart-ui';
 import { IconFont } from '@/components/icon-font';
-import { Icon } from '@ray-js/icons';
 import styles from './index.module.less';
 import { Image } from '@ray-js/smart-ui';
 import { useDpSchema, useProps, useDevInfo } from '@ray-js/panel-sdk';
 import { getCloudData, setCloudData, getAllCloudData } from '@/utils/storage';
 import litterBoxImage from '@/pages/assets/litterBox_image.jpg';
 import { router } from '@ray-js/ray';
-import { TopBar } from '@/components';
-import { useSelector } from '@/redux';
-import homeIcon from '@tuya-miniapp/icons/dist/svg/Home';
-import settingIcon from '@tuya-miniapp/icons/dist/svg/Setting';
+import TopBar from '@/components/TopBar';
 
 interface WeightRecord {
   weight: number;
   timestamp: number;
 }
 
-export default function Home() {
+export default function Settings() {
   const safeArea = useSelectorMemoized(selectSafeArea);
   useHideMenuButton();
-
-  const tab = useSelector(({ uiState }) => uiState.tab);
-  console.log('Current tab:', tab);
 
   const dpState = useProps(state => state); // Get all dpState
   const devInfo = useDevInfo();
@@ -80,9 +73,14 @@ export default function Home() {
     getCatWeightReportData();
   }, [devInfo?.devId]);
 
+  // const res = await getAllCloudData();
+  // console.log('All Cloud Data:', res);
+  // setCloudData('cat_weight', devInfo.dpCodes.cat_weight);
+
   return (
     <View className={styles.container} style={{ paddingTop: `${safeArea?.top ?? 48}px` }}>
       <TopBar />
+      {/* <NavBar title="不锈钢智能猫砂盆!!!!!" round onClickTitle={() => {}} />
       <View
         style={{
           display: 'flex',
@@ -92,17 +90,19 @@ export default function Home() {
           // backgroundColor: 'red',
         }}
       >
+        {Object.keys(dpSchema)?.map(schemaName => {
+          return <Text style={{ color: 'black' }}>{schemaName}</Text>;
+        })}
         <Image width="300px" height="300px" src={litterBoxImage} />
-      </View>
-
-      <Tabbar active={active} safeAreaInsetBottom={false} onChange={onNavTabChange}>
-        <TabbarItem name="home" icon={homeIcon}>
+      </View> */}
+      {/* <Tabbar active={active} safeAreaInsetBottom={false} onChange={onNavTabChange}>
+        <TabbarItem name="home" icon={houseIcon}>
           Home
         </TabbarItem>
-        <TabbarItem name="setting" icon={settingIcon}>
+        <TabbarItem name="setting" icon={pawPrintIcon}>
           Setting
         </TabbarItem>
-      </Tabbar>
+      </Tabbar> */}
       {/* <View className={styles.view}>
         <View
           className={styles.content}

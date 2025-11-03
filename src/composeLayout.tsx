@@ -6,7 +6,10 @@ import { updateThemeType } from './redux/modules/themeSlice';
 import { initializeSystemInfo } from './redux/modules/systemInfoSlice';
 import store from './redux';
 import './styles/index.less';
+import { DevInfo, kit } from '@ray-js/panel-sdk';
+import { devInfoChange } from './redux/modules/devInfoSlice';
 
+const { initDevInfo } = kit;
 interface Props {
   devInfo: DevInfo;
   // eslint-disable-next-line react/require-default-props
@@ -29,6 +32,9 @@ const composeLayout = (SubComp: React.ComponentType<any>) => {
 
       dispatch(initializeSystemInfo(systemInfo));
       dispatch(updateThemeType(theme));
+
+      const deviceInfo = await initDevInfo();
+      dispatch(devInfoChange(deviceInfo));
     }
 
     render() {

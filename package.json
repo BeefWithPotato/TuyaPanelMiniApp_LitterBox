@@ -14,6 +14,7 @@
   "dependencies": {
     "@ray-js/api": "^1.7.51",
     "@ray-js/components-ty": "^0.2.0",
+    "@ray-js/icons": "^1.7.51",
     "@ray-js/panel-sdk": "^1.13.1",
     "@ray-js/ray": "^1.7.24",
     "@ray-js/ray-error-catch": "^0.0.25",
