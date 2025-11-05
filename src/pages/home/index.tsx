@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment, FC } from 'react';
 import { useHideMenuButton, useSelectorMemoized } from '@/hooks';
 import { selectSafeArea } from '@/redux/modules/systemInfoSlice';
 import { Text, View, getAnalyticsLogsStatusLog } from '@ray-js/ray';
-import { NavBar, Button, Tabbar, TabbarItem } from '@ray-js/smart-ui';
+import { SmartEvent, Button, Tabbar, TabbarItem } from '@ray-js/smart-ui';
 import { IconFont } from '@/components/icon-font';
 import { Icon } from '@ray-js/icons';
 import styles from './index.module.less';
@@ -11,10 +11,14 @@ import { useDpSchema, useProps, useDevInfo } from '@ray-js/panel-sdk';
 import { getCloudData, setCloudData, getAllCloudData } from '@/utils/storage';
 import litterBoxImage from '@/pages/assets/litterBox_image.jpg';
 import { router } from '@ray-js/ray';
-import { TopBar } from '@/components';
+import { TopBar, TabBar } from '@/components';
 import { useSelector } from '@/redux';
 import homeIcon from '@tuya-miniapp/icons/dist/svg/Home';
 import settingIcon from '@tuya-miniapp/icons/dist/svg/Setting';
+import MainView from './MainView';
+import CustomSettings from './CustomSettings';
+import { TabType } from '@/constant';
+import { updateUI } from '@/redux/action';
 
 interface WeightRecord {
   weight: number;
@@ -83,7 +87,7 @@ export default function Home() {
   return (
     <View className={styles.container} style={{ paddingTop: `${safeArea?.top ?? 48}px` }}>
       <TopBar />
-      <View
+      {/* <View
         style={{
           display: 'flex',
           // justifyContent: 'center',
@@ -93,16 +97,24 @@ export default function Home() {
         }}
       >
         <Image width="300px" height="300px" src={litterBoxImage} />
-      </View>
-
-      <Tabbar active={active} safeAreaInsetBottom={false} onChange={onNavTabChange}>
-        <TabbarItem name="home" icon={homeIcon}>
+      </View> */}
+      <View>{tab === TabType.Home && <MainView />}</View>
+      <View>{tab === TabType.CustomSettings && <CustomSettings />}</View>
+      <TabBar />
+      {/* <Tabbar
+        active={tab}
+        safeAreaInsetBottom={false}
+        onChange={(e: SmartEvent<TabType>) => {
+          updateUI({ tab: e.detail });
+        }}
+      >
+        <TabbarItem name={TabType.Home} icon={homeIcon}>
           Home
         </TabbarItem>
-        <TabbarItem name="setting" icon={settingIcon}>
+        <TabbarItem name={TabType.CustomSettings} icon={settingIcon}>
           Setting
         </TabbarItem>
-      </Tabbar>
+      </Tabbar> */}
       {/* <View className={styles.view}>
         <View
           className={styles.content}
