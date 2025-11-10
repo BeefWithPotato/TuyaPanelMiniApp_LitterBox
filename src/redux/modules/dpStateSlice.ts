@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { responseUpdateDpCreator, updateDpCreator } from '@ray-js/tuya-dp-kit';
-import { modeCode, switchCode } from '@/config/dpCodes';
+import { excretionTimeDay, excretionTimesDay } from '@/config/dpCodes';
 import { devInfoChange } from './devInfoSlice';
 import { ReduxState } from '..';
 
@@ -8,8 +8,8 @@ export type DpState = {
   /**
    * 在此自定义你的当前项目 dp type
    */
-  [switchCode]: boolean;
-  [modeCode]: 'nature' | 'sleep' | 'fresh' | 'smart' | 'strong' | string;
+  [excretionTimeDay]: number;
+  [excretionTimesDay]: number;
 };
 
 export type DpStateKey = keyof DpState;

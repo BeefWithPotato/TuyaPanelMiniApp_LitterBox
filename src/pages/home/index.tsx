@@ -18,7 +18,7 @@ import settingIcon from '@tuya-miniapp/icons/dist/svg/Setting';
 import MainView from './MainView';
 import CustomSettings from './CustomSettings';
 import { TabType } from '@/constant';
-import { updateUI } from '@/redux/action';
+import { updateUI, getExcessiveData } from '@/redux/action';
 
 interface WeightRecord {
   weight: number;
@@ -32,72 +32,49 @@ export default function Home() {
   const tab = useSelector(({ uiState }) => uiState.tab);
   console.log('Current tab:', tab);
 
-  const dpState = useProps(state => state); // Get all dpState
-  const devInfo = useDevInfo();
-  // When the project starts, automatically pull the product schema information corresponding to the productId on the developer platform
-  const dpSchema = useDpSchema();
-  // Read dpState data from the device model
-  console.log('devInfo:', devInfo);
-  console.log('dpSchema:', dpSchema);
+  // const dpState = useProps(state => state); // Get all dpState
+  // const devInfo = useDevInfo();
+  // // When the project starts, automatically pull the product schema information corresponding to the productId on the developer platform
+  // const dpSchema = useDpSchema();
+  // // Read dpState data from the device model
+  // console.log('devInfo:', devInfo);
+  // console.log('dpSchema:', dpSchema);
 
-  const [weightHistory, setWeightHistory] = useState<WeightRecord[]>([]);
-  const [active, setActive] = useState(0);
-  // const onNavTabChange = e => {
-  //   setActive(e.detail);
-  // };
+  // const [weightHistory, setWeightHistory] = useState<WeightRecord[]>([]);
+  // const [active, setActive] = useState(0);
+  // const test = getExcessiveData();
+  // console.log('test', test);
+  // useEffect(() => {
+  //   // 6: cat_weight g
+  //   // 7: excretion_times_day 每天排泄次数
+  //   // 8: excretion_time_day 每次排泄时长
+  //   // 9： manual_clean 手动清理 Boolean
 
-  const onNavTabChange = e => {
-    setActive(e.detail);
-
-    // Navigate to corresponding page
-    if (e.detail === 'home') {
-      router.push('/');
-    } else if (e.detail === 'setting') {
-      router.push('/settings');
-    }
-  };
-
-  useEffect(() => {
-    // 6: cat_weight g
-    // 7: excretion_times_day 每天排泄次数
-    // 8: excretion_time_day 每次排泄时长
-    // 9： manual_clean 手动清理 Boolean
-
-    const getCatWeightReportData = async () => {
-      try {
-        console.log('devInfo?.devId', devInfo?.devId);
-        console.log('dpSchema.cat_weight.id.toString()', dpSchema.cat_weight.id.toString());
-        const res = await getAnalyticsLogsStatusLog({
-          devId: devInfo?.devId,
-          dpIds: '6,7,8',
-          // dpIds: 'cat_weight',
-          offset: 0,
-          limit: 20,
-          // startTime: '1760392672',
-          // endTime: new Date().getTime().toString(),
-        });
-        console.log('✅ Cloud data loaded:', res);
-      } catch (err) {
-        console.error('❌ Failed to load cloud data:', err);
-      }
-    };
-    getCatWeightReportData();
-  }, [devInfo?.devId]);
+  //   const getCatWeightReportData = async () => {
+  //     try {
+  //       console.log('devInfo?.devId', devInfo?.devId);
+  //       console.log('dpSchema.cat_weight.id.toString()', dpSchema.cat_weight.id.toString());
+  //       const res = await getAnalyticsLogsStatusLog({
+  //         devId: devInfo?.devId,
+  //         dpIds: '6,7,8',
+  //         // dpIds: 'cat_weight',
+  //         offset: 0,
+  //         limit: 20,
+  //         // startTime: '1760392672',
+  //         // endTime: new Date().getTime().toString(),
+  //       });
+  //       console.log('✅ Cloud data loaded:', res);
+  //     } catch (err) {
+  //       console.error('❌ Failed to load cloud data:', err);
+  //     }
+  //   };
+  //   getCatWeightReportData();
+  // }, [devInfo?.devId]);
 
   return (
     <View className={styles.container} style={{ paddingTop: `${safeArea?.top ?? 48}px` }}>
       <TopBar />
-      {/* <View
-        style={{
-          display: 'flex',
-          // justifyContent: 'center',
-          // alignItems: 'center',
-          flexDirection: 'column',
-          // backgroundColor: 'red',
-        }}
-      >
-        <Image width="300px" height="300px" src={litterBoxImage} />
-      </View> */}
+
       <View>{tab === TabType.Home && <MainView />}</View>
       <View>{tab === TabType.CustomSettings && <CustomSettings />}</View>
       <TabBar />

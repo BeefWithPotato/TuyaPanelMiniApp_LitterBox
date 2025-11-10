@@ -44,7 +44,7 @@ const middlewares = isDebug ? [logger, dpKitMiddleware] : [dpKitMiddleware];
 const store = configureStore({
   reducer: {
     devInfo: devInfoReducer,
-    // dpState: dpStateReducer,
+    dpState: dpStateReducer,
     uiState: uiReducer,
     theme: themeReducer,
     systemInfo: systemInfoReducer,

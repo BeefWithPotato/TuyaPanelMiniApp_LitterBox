@@ -8,9 +8,10 @@
   },
   "dark": {
     "navBgColor": "#000000",
-    "navTxtStyle": "white",
+    "navTxtStyle": "black",
     "bgColor": "#000000",
     "setNavBgColor": "#181818",
-    "setBgColor": "#222222"
+    "setBgColor": "#222222",
+    "textColor": "red"
   }
 }

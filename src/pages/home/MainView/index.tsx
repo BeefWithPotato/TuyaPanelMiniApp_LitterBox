@@ -13,13 +13,46 @@ import litterBoxImage from '@/pages/assets/litterBox_image.jpg';
 import { router } from '@ray-js/ray';
 import { TopBar } from '@/components';
 import { useSelector } from '@/redux';
-import homeIcon from '@tuya-miniapp/icons/dist/svg/Home';
-import settingIcon from '@tuya-miniapp/icons/dist/svg/Setting';
+import PaintBrush from '@tuya-miniapp/icons/dist/svg/PaintBrush';
+import DeleteIcon from '@tuya-miniapp/icons/dist/svg/DeleteLine';
+import LevelIcon from '@tuya-miniapp/icons/dist/svg/ArrowSquare';
 
-interface WeightRecord {
-  weight: number;
-  timestamp: number;
-}
+const display = [
+  {
+    label: '今日如厕',
+    dpID: 7,
+    dpCode: 'excretion_times_day',
+    unit: '次',
+  },
+
+  {
+    label: '如厕时常',
+    dpID: 8,
+    dpCode: 'excretion_time_day',
+    unit: '秒',
+  },
+];
+
+const controlBtns = [
+  {
+    label: '清理',
+    dpID: 3,
+    dpCode: 'start',
+    icon: PaintBrush,
+  },
+  {
+    label: '清砂',
+    dpID: 107,
+    dpCode: 'clear',
+    icon: DeleteIcon,
+  },
+  {
+    label: '抚平',
+    dpID: 103,
+    dpCode: 'level',
+    icon: LevelIcon,
+  },
+];
 
 export default function () {
   //   const safeArea = useSelectorMemoized(selectSafeArea);
@@ -29,12 +62,12 @@ export default function () {
   //   console.log('Current tab:', tab);
 
   //   const dpState = useProps(state => state); // Get all dpState
-  //   const devInfo = useDevInfo();
+  const devInfo = useDevInfo();
   // When the project starts, automatically pull the product schema information corresponding to the productId on the developer platform
-  //   const dpSchema = useDpSchema();
+  const dpSchema = useDpSchema();
   // Read dpState data from the device model
-  //   console.log('devInfo:', devInfo);
-  //   console.log('dpSchema:', dpSchema);
+  console.log('devInfo:', devInfo);
+  console.log('dpSchema:', dpSchema);
 
   //   const [weightHistory, setWeightHistory] = useState<WeightRecord[]>([]);
   //   const [active, setActive] = useState(0);
@@ -85,14 +118,67 @@ export default function () {
       <View
         style={{
           display: 'flex',
-          // justifyContent: 'center',
-          // alignItems: 'center',
-          flexDirection: 'column',
-          // backgroundColor: 'red',
+          justifyContent: 'space-between',
         }}
       >
-        <Image width="300px" height="300px" src={litterBoxImage} />
+        <View
+          style={{
+            display: 'flex',
+            flex: 3,
+            // justifyContent: 'center',
+            // alignItems: 'center',
+            flexDirection: 'column',
+            // backgroundColor: 'red',
+          }}
+        >
+          <Image width="300px" height="300px" src={litterBoxImage} />
+        </View>
+        {/* Status Display */}
+        <View
+          style={{
+            display: 'flex',
+            flex: 1,
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: '40px',
+          }}
+        >
+          {display.map(dp => {
+            return (
+              <View key={dp.dpCode}>
+                <View>
+                  <Text style={{ fontSize: 60, color: 'black', marginRight: '5px' }}>
+                    {devInfo.dpCodes[dp.dpCode]}
+                  </Text>
+                  <Text style={{ fontSize: 30, color: 'black' }}>{dp.unit}</Text>
+                </View>
+                <Text style={{ fontSize: 30, color: '#8C8C8C' }}>{dp.label}</Text>
+              </View>
+            );
+          })}
+        </View>
       </View>
+      {/* Control Buttons */}
+      <View style={{ display: 'flex', marginTop: '20px', gap: '20px', justifyContent: 'center' }}>
+        {controlBtns.map(btn => {
+          return (
+            <Button
+              className={styles.bottomButton}
+              type="primary"
+              key={btn.label}
+              round
+              customStyle={{ width: '120px' }}
+              icon={btn.icon}
+            >
+              {btn.label}
+            </Button>
+          );
+        })}
+      </View>
+
+      {/* Line Graph */}
+      <View></View>
 
       {/* <Tabbar active={active} safeAreaInsetBottom={false} onChange={onNavTabChange}>
         <TabbarItem name="home" icon={homeIcon}>

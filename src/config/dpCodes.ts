@@ -1,3 +1,3 @@
 // 示例 请驼峰Code命名
-export const switchCode = 'switch';
-export const modeCode = 'mode';
+export const excretionTimeDay = 'excretion_time_day';
+export const excretionTimesDay = 'excretion_times_day';
