@@ -2,59 +2,94 @@ import React, { useState, useEffect, Fragment, FC } from 'react';
 import { useHideMenuButton, useSelectorMemoized } from '@/hooks';
 import { selectSafeArea } from '@/redux/modules/systemInfoSlice';
 import { Text, View, getAnalyticsLogsStatusLog } from '@ray-js/ray';
-import { NavBar, Button, Tabbar, TabbarItem } from '@ray-js/smart-ui';
+import {
+  NavBar,
+  Button,
+  Tabbar,
+  TabbarItem,
+  Divider,
+  Tabs,
+  Tab,
+  Grid,
+  GridItem,
+  ConfigProvider,
+} from '@ray-js/smart-ui';
 import { IconFont } from '@/components/icon-font';
 import { Icon } from '@ray-js/icons';
 import styles from './index.module.less';
 import { Image } from '@ray-js/smart-ui';
 import { useDpSchema, useProps, useDevInfo } from '@ray-js/panel-sdk';
 import { getCloudData, setCloudData, getAllCloudData } from '@/utils/storage';
-import litterBoxImage from '@/pages/assets/litterBox_image.jpg';
+import litterBoxImage from '@/pages/assets/banner.jpg';
 import { router } from '@ray-js/ray';
 import { TopBar } from '@/components';
 import { useSelector } from '@/redux';
 import PaintBrush from '@tuya-miniapp/icons/dist/svg/PaintBrush';
 import DeleteIcon from '@tuya-miniapp/icons/dist/svg/DeleteLine';
 import LevelIcon from '@tuya-miniapp/icons/dist/svg/ArrowSquare';
-
-const display = [
-  {
-    label: '今日如厕',
-    dpID: 7,
-    dpCode: 'excretion_times_day',
-    unit: '次',
-  },
-
-  {
-    label: '如厕时常',
-    dpID: 8,
-    dpCode: 'excretion_time_day',
-    unit: '秒',
-  },
-];
-
-const controlBtns = [
-  {
-    label: '清理',
-    dpID: 3,
-    dpCode: 'start',
-    icon: PaintBrush,
-  },
-  {
-    label: '清砂',
-    dpID: 107,
-    dpCode: 'clear',
-    icon: DeleteIcon,
-  },
-  {
-    label: '抚平',
-    dpID: 103,
-    dpCode: 'level',
-    icon: LevelIcon,
-  },
-];
+import { getDevProperty, saveDevProperty } from '@ray-js/ray';
+import { getDeviceProperty, getLaunchOptionsSync } from '@ray-js/ray';
+import { setBackgroundColor } from '@ray-js/api';
 
 export default function () {
+  const displayTop = [
+    {
+      label: '今日如厕',
+      dpID: 7,
+      dpCode: 'excretion_times_day',
+      unit: '次',
+    },
+
+    {
+      label: '如厕时常',
+      dpID: 8,
+      dpCode: 'excretion_time_day',
+      unit: '秒',
+    },
+  ];
+
+  const displayMiddle = [
+    {
+      label: '猫砂盆状态',
+      dpID: 108,
+      dpCode: 'work_status',
+      // unit: '次',
+    },
+
+    {
+      label: '集便仓状态',
+      dpID: 113,
+      dpCode: 'bin_status',
+      // unit: '秒',
+    },
+    {
+      label: '今日如厕',
+      dpID: 7,
+      dpCode: 'excretion_times_day',
+      // unit: '次',
+    },
+  ];
+
+  const controlBtns = [
+    {
+      label: '清理',
+      dpID: 3,
+      dpCode: 'start',
+      icon: PaintBrush,
+    },
+    {
+      label: '清砂',
+      dpID: 107,
+      dpCode: 'clear',
+      icon: DeleteIcon,
+    },
+    {
+      label: '抚平',
+      dpID: 103,
+      dpCode: 'level',
+      icon: LevelIcon,
+    },
+  ];
   //   const safeArea = useSelectorMemoized(selectSafeArea);
   //   useHideMenuButton();
 
@@ -68,23 +103,6 @@ export default function () {
   // Read dpState data from the device model
   console.log('devInfo:', devInfo);
   console.log('dpSchema:', dpSchema);
-
-  //   const [weightHistory, setWeightHistory] = useState<WeightRecord[]>([]);
-  //   const [active, setActive] = useState(0);
-  // const onNavTabChange = e => {
-  //   setActive(e.detail);
-  // };
-
-  //   const onNavTabChange = e => {
-  //     setActive(e.detail);
-
-  //     // Navigate to corresponding page
-  //     if (e.detail === 'home') {
-  //       router.push('/');
-  //     } else if (e.detail === 'setting') {
-  //       router.push('/settings');
-  //     }
-  //   };
 
   //   useEffect(() => {
   //     // 6: cat_weight g
@@ -119,19 +137,26 @@ export default function () {
         style={{
           display: 'flex',
           justifyContent: 'space-between',
+          alignItems: 'center',
+          backgroundColor: '#ffffff',
         }}
       >
         <View
           style={{
             display: 'flex',
-            flex: 3,
-            // justifyContent: 'center',
-            // alignItems: 'center',
+            flex: 2,
+            justifyContent: 'center',
+            alignItems: 'center',
             flexDirection: 'column',
-            // backgroundColor: 'red',
+            // marginLeft: '30px',
           }}
         >
-          <Image width="300px" height="300px" src={litterBoxImage} />
+          <Image
+            width="270px"
+            height="270px"
+            // src={devInfo?.iconUrl}
+            src={litterBoxImage}
+          />
         </View>
         {/* Status Display */}
         <View
@@ -144,12 +169,12 @@ export default function () {
             gap: '40px',
           }}
         >
-          {display.map(dp => {
+          {displayTop.map(dp => {
             return (
               <View key={dp.dpCode}>
                 <View>
                   <Text style={{ fontSize: 60, color: 'black', marginRight: '5px' }}>
-                    {devInfo.dpCodes[dp.dpCode]}
+                    {devInfo.dps[dp.dpID]}
                   </Text>
                   <Text style={{ fontSize: 30, color: 'black' }}>{dp.unit}</Text>
                 </View>
@@ -159,8 +184,27 @@ export default function () {
           })}
         </View>
       </View>
+
       {/* Control Buttons */}
-      <View style={{ display: 'flex', marginTop: '20px', gap: '20px', justifyContent: 'center' }}>
+      {/* <Divider
+        customStyle={{
+          color: 'black',
+          borderColor: 'black',
+          width: '80%',
+        }}
+      /> */}
+      <View
+        style={{
+          display: 'flex',
+          margin: '10px 10px 10px 10px',
+          gap: '20px',
+          justifyContent: 'center',
+          alignItems: 'center',
+          // backgroundColor: '#f2f4f6',
+          borderRadius: '20px',
+          height: '80px',
+        }}
+      >
         {controlBtns.map(btn => {
           return (
             <Button
@@ -168,7 +212,7 @@ export default function () {
               type="primary"
               key={btn.label}
               round
-              customStyle={{ width: '120px' }}
+              customStyle={{ width: '100px' }}
               icon={btn.icon}
             >
               {btn.label}
@@ -176,32 +220,45 @@ export default function () {
           );
         })}
       </View>
+      {/* Grid View */}
+      {/* <View
+        style={{
+          margin: '0 10px 0 10px',
+          padding: '10px 0 10px 0',
+          backgroundColor: '#ffffff',
+          borderRadius: '20px',
+          // width: '100%',
+        }}
+      > */}
+      <ConfigProvider
+        themeVars={{
+          gridItemContentBackgroundColor: '#ffffff',
+          gridItemTextColor: 'black',
+          gridItemTextFontSize: '20px',
+        }}
+      >
+        <Grid direction="horizontal" columnNum={3} clickable={false} gutter="2px">
+          {displayMiddle.map((dp, index) => (
+            <GridItem key={`${index + 1}`} useSlot>
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '10px',
+                }}
+              >
+                <Text style={{ fontSize: 30, color: '#8C8C8C' }}>{dp.label}</Text>
+                <Text style={{ fontSize: 30, color: 'black' }}>{devInfo?.dps[dp.dpID]}</Text>
+              </View>
+            </GridItem>
+          ))}
+        </Grid>
+      </ConfigProvider>
+      {/* </View> */}
 
       {/* Line Graph */}
-      <View></View>
-
-      {/* <Tabbar active={active} safeAreaInsetBottom={false} onChange={onNavTabChange}>
-        <TabbarItem name="home" icon={homeIcon}>
-          Home
-        </TabbarItem>
-        <TabbarItem name="setting" icon={settingIcon}>
-          Setting
-        </TabbarItem>
-      </Tabbar> */}
-      {/* <View className={styles.view}>
-        <View
-          className={styles.content}
-          onClick={() => {
-            // actions.switch_1.toggle();
-          }}
-        >
-          <View className={styles['space-around']} style={{ marginTop: '50rpx' }}>
-            <Text>Public SDM Template</Text>
-            <Button type="primary">Smart UI Primary Button</Button>
-            <IconFont icon="sun" />
-          </View>
-        </View>
-      </View> */}
+      <View style={{ backgroundColor: '' }}></View>
     </View>
   );
 }
